@@ -12,25 +12,29 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView>
-    with SingleTickerProviderStateMixin {
-  late TabController controller;
+class _HomeViewState extends State<HomeView> {
+  late PageController _pageController;
   int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: 2, vsync: this);
-    controller.addListener(() {
-      setState(() {
-        _currentIndex = controller.index;
-      });
+    _pageController = PageController();
+
+    _pageController.addListener(() {
+      final page = _pageController.page!;
+      int newIndex = page.round();
+      if (_currentIndex != newIndex) {
+        setState(() {
+          _currentIndex = newIndex;
+        });
+      }
     });
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -42,18 +46,21 @@ class _HomeViewState extends State<HomeView>
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            controller.animateTo(index);
+            _pageController.animateToPage(index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut);
           });
         },
       ),
       backgroundColor: AppColors.primaryColor,
       body: SafeArea(
-        child: TabBarView(
-          controller: controller,
+        child: PageView(
+          controller: _pageController,
+          physics: const BouncingScrollPhysics(),
           children: [
             const HomeViewBody(),
             SettingViewBody(
-              controller: controller,
+              controller: _pageController,
             ),
           ],
         ),

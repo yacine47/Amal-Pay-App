@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class CustomAppBarSettingView extends StatelessWidget {
   const CustomAppBarSettingView({super.key, required this.controller});
-  final TabController controller;
+  final PageController controller;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,7 +22,9 @@ class CustomAppBarSettingView extends StatelessWidget {
                 CustomAppBarTitle(
                   title: 'الاعدادت',
                   onTap: () {
-                    controller.animateTo(0);
+                    controller.animateTo(0,
+                        duration: const Duration(milliseconds: 100),
+                        curve: Curves.easeInOut);
                   },
                 ),
                 const Spacer(),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class SettingViewBody extends StatelessWidget {
   const SettingViewBody({super.key, required this.controller});
-  final TabController controller;
+  final PageController controller;
   @override
   Widget build(BuildContext context) {
     return Container(
