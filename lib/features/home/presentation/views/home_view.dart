@@ -20,10 +20,9 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     _pageController = PageController();
-
     _pageController.addListener(() {
       final page = _pageController.page!;
-      int newIndex = page.round();
+      int newIndex = page.round(); // Get the nearest index
       if (_currentIndex != newIndex) {
         setState(() {
           _currentIndex = newIndex;
@@ -38,25 +37,31 @@ class _HomeViewState extends State<HomeView> {
     super.dispose();
   }
 
+  void _onTabTapped(int index) {
+    // if (_currentIndex != index) {
+    setState(() {
+      _currentIndex = index;
+      _pageController.jumpToPage(index);
+    });
+    // }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-            _pageController.animateToPage(index,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut);
-          });
-        },
+        onTap: _onTabTapped, // Use the new method here
       ),
       backgroundColor: AppColors.primaryColor,
       body: SafeArea(
         child: PageView(
           controller: _pageController,
-          physics: const BouncingScrollPhysics(),
+          onPageChanged: (index) {
+            setState(() {
+              _currentIndex = index; // Update the index when the page changes
+            });
+          },
           children: [
             const HomeViewBody(),
             SettingViewBody(
